@@ -7,6 +7,10 @@ export interface IResult<T, E> {
   map: <A>(fn: (v: T) => A) => Result<A, E>;
   /* Maps the contained error */
   mapError: <A>(fn: (e: E) => A) => Result<T, A>;
+  /* Flat maps the contained value */
+  flatMap: <A>(fn: (v: T) => Result<A, E>) => Result<A, E>;
+  /* Flat maps the contained error */
+  flatMapError: <A>(fn: (e: E) => Result<T, A>) => Result<T, A>;
   /* Executes first callback if has contained value, or second if has contained error */
   match: <A>(fn1: (v: T) => A, fn2: (e: E) => A) => A;
   /* Returns the contained value, or `v` if it is an ErrorResult */
@@ -17,7 +21,7 @@ export interface IResult<T, E> {
   _unsafeUnwrapError: () => E;
 }
 
-class ErrorResult<T, E> implements IResult<T, E> {
+export class ErrorResult<T, E> implements IResult<T, E> {
   constructor(private readonly _error: E) {}
 
   isError(): this is ErrorResult<T, E> {
@@ -32,8 +36,16 @@ class ErrorResult<T, E> implements IResult<T, E> {
     return err(this._error);
   }
 
-  mapError<A>(fn: (v: E) => A): Result<T, A> {
+  mapError<A>(fn: (e: E) => A): Result<T, A> {
     return err(fn(this._error));
+  }
+
+  flatMap<A>(_: (v: T) => Result<A, E>): Result<A, E> {
+    return err(this._error);
+  }
+
+  flatMapError<A>(fn: (e: E) => Result<T, A>): Result<T, A> {
+    return fn(this._error);
   }
 
   match<A>(_: (v: T) => A, fn: (e: E) => A): A {
@@ -57,7 +69,7 @@ class ErrorResult<T, E> implements IResult<T, E> {
   }
 }
 
-class OkResult<T, E> implements IResult<T, E> {
+export class OkResult<T, E> implements IResult<T, E> {
   constructor(private readonly _value: T) {}
 
   isError(): this is ErrorResult<T, E> {
@@ -72,7 +84,15 @@ class OkResult<T, E> implements IResult<T, E> {
     return ok(fn(this._value));
   }
 
-  mapError<A>(_: (v: E) => A): Result<T, A> {
+  mapError<A>(_: (e: E) => A): Result<T, A> {
+    return ok(this._value);
+  }
+
+  flatMap<A>(fn: (v: T) => Result<A, E>): Result<A, E> {
+    return fn(this._value);
+  }
+
+  flatMapError<A>(_: (e: E) => Result<T, A>): Result<T, A> {
     return ok(this._value);
   }
 

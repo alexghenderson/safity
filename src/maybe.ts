@@ -19,7 +19,7 @@ export interface IMaybe<T> {
   _unsafeUnwrap: () => T;
 }
 
-class SomeMaybe<T> implements IMaybe<T> {
+export class SomeMaybe<T> implements IMaybe<T> {
   constructor(private readonly _value: T) {}
 
   isSome(): this is SomeMaybe<T> {
@@ -59,7 +59,7 @@ class SomeMaybe<T> implements IMaybe<T> {
   }
 }
 
-class NoneMaybe<T> implements IMaybe<T> {
+export class NoneMaybe<T> implements IMaybe<T> {
   isSome(): this is SomeMaybe<T> {
     return false;
   }

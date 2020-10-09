@@ -1,6 +1,6 @@
 {
   "name": "safity",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Classes and methods for safer typescript applications",
   "main": "./lib/ndex.js",
   "module": "./module/index.js",

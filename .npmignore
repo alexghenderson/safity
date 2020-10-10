@@ -1,0 +1,8 @@
+*
+!lib/*
+!module/*
+!src/*
+!types/*
+!umd/*
+!package.json
+!README.md

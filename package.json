@@ -2,7 +2,7 @@
   "name": "safity",
   "version": "1.2.2",
   "description": "Classes and methods for safer typescript applications",
-  "main": "./lib/ndex.js",
+  "main": "./lib/index.js",
   "module": "./module/index.js",
   "types": "types/index.d.js",
   "scripts": {
